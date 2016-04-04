@@ -1,5 +1,184 @@
 ## NEXT
 
+## 0.24.0, 2016-Mar-28
+
+- Add a title with emoji's shortname on picker
+- Add Assets and Blaze to jshint global variables
+- Add button to download uploaded files
+- Add button to verify email address
+- Add description and params to slashcommand "me"
+- Add index for Messages pinned, Messages u._id, Subscription emailNotifications, Subscription rid, alert, u._id, Subscription rid, roles, to Subscriptions ls, to Users name, Users lastLogin, Users status, Subscriptions, mobilePushNotifications and desktopNotifications
+- Add Reactions translation
+- Add RTL switch to fontello demo page
+- Add Support for block quote
+- Add titles for emoji categories
+- Add UI for reactions
+- Close #2394; Add tab-i18n to list of allowed URLs in CORS
+- Count unreads of the opened room too
+- Debounce calls of codemirror changed
+- Do not hide navigation bar of swipebox
+- Do not override value of record on input blur
+- Emoji picker now receives a callback
+- Expose emoji picker in RocketChat namespace
+- Fix #2615; Bad Uri generation for Gitlab Oauth profile
+- Fix emoji popup using emojione's template to render emojis
+- Fix error when push gateways is active
+- Fix error with asset upload in Firefox
+- Fix flex-nav show/hide animation on RTL
+- Fix for word highlighting of none Latin characters
+- Fix full screen of code editor for new incoming integrations
+- Fix problem with ddp connection from some urls
+- Fix RTL icon issues
+- Fix set user's name on creation
+- Fix sound of new room
+- Fix url for the logo asset
+- Focus the message input on window focus
+- Get room data on sendMessage if room is incomplete
+- Improve subscription filteredUsers
+- Improve tooltip positioning
+- Improve verification of new user as admin or user
+- More channels shows all channels by default
+- New default hover message background color
+- New emoji font characters
+- New reactions package
+- New tooltip lib
+- Only compile scripts if scripts are enabled and filled
+- Prevent to use APN with empty certs
+- Recompile LESS files on each addPackageAsset call
+- Remove all references to octicons
+- Remove CW and CCW icons from mirror map
+- Try to be smarter when suggesting usernames
+- Unblock call to avatar suggestion
+- Unlock methods 'joinDefaultChannels' and 'leaveRoom'
+- Update ClipboardJS to version 1.5.9
+- Update fontello with GitHub Octicons
+- Use Emojione's sprites
+- Use new tooptip lib for reactions
+- Use the login layout for the reset password screen
+- Using PNG emoji sprites for better performance
+
+## 0.23.0, 2016-Mar-21
+
+- Accept * for all media types
+- Add emoji picker
+- Add ENV to set HOME to /tmp in docker files
+- Add Katex plugin (for TeX math rendering)
+- Allow custom login page via iframe
+- Allow multiple extensions in assets and fix validation
+- CAS Plugin: Added version selector to prepare for further version support.
+- Close #2495; Allow pass @username in avatar
+- Closes #2172: Accepts markdown for room topic.
+- Closes #625: Filter and sorts direct messages and private groups.
+- Do not use user id in integration URL but keep compatibility
+- Encrypts _id to avoid duplicate encrypted messages
+- Fix #2346: Adds administration menu when 'manage-integrations' permission is added.
+- Fix #2433: Directly linked channel does not load for newly created user
+- Fix #2433: Directly linked channel does not load for newly created user
+- Fix #2477: Admin settings, plain-text SMTP password.
+- Fix #2515: Update profile when changing username or email is disabled.
+- Fix #2519: not showing stop record button
+- Fix #2526: CAS Plugin: Join freshly created users to default channels
+- Fix #2527: Set private group owner and moderator on creation.
+- Fix #2528: by accepting webkitSubtle as crypto.
+- Fix #2550: allows admins to change usernames and e-mails
+- Fix #2558: Remove trailing slash on livechat install code
+- Fix #2573: Proper emoji tone test
+- Fix decoding HTML entities in KaTeX plugin
+- Fix instructions for outgoing webhook response
+- Fix restricted domain registration regex
+- Only show the CURL field on integrations after token was generated
+- OTR: Encrypt message timestamp to make sure messages are retrieved in the right order.
+- OTR: Uses jwk instead of spki for exchanging public keys.
+- Pass correct raw value for content in integration scripts
+- Pass restricted domain as string when only one
+- Rebuild the cordova index when change the Site Url
+- Remove the try/catches around the imports
+- Retry to send push notification to gateway on error
+- RTL: Give `padding-right` to `.input-message`
+- Saves each successful migration as the latest locked migration version.
+- Send correct headers to download GridFS uploads
+- Set DDP_DEFAULT_CONNECTION_URL to the same value of ROOT_URL
+- Use login logo as asset
+- Use URL compatible token and do not sabe in user record
+
+## 0.22.0, 2016-Mar-14
+
+- Add AES encryption routines
+- Add CDN config option for file upload
+- Add icon to show OTR status in channel title
+- Add option to disable integration and scripts
+- Add Off-The-Record funtionallity
+- Add RocketChat.promises API
+- Allow outgoing scripts to call HTTP
+- Allow processOutgoingResponseScript to process erros
+- Allow send message and continue with the request
+- Always notifies livechat messages - Closes #2212
+- Better rendering of message attachment text
+- Client validation of valid types for upload
+- Close #1635; Add textarea for adding custom CSS/JS
+- Close #2494; Close all opened rooms on logout
+- Enables notification by displaying "Encrypted message" instead of the hash or the actual message
+- Fix bug when changing room name to same value
+- Fix code indentation - closes #2454
+- Moves change of language to preferences
+- Requires current password to change profile settings
+- Fixes #691; Adds sorting to channels list.
+- Fixes S3 config without acl
+- Improve UI of new messages bar
+- Improved send button
+- Move custom OAuth to OAuth section of admin panel
+- Moved all fileupload settings to package
+- Moving files to expose functions
+- Pass request as object to process_incoming_request
+- Protect file uploads on S3
+- Readding autocomplete to message input box - fixes #2489
+- Reduce font-size of new messages bar
+- Refactor for file upload response handlers API
+- Removed Meteor Error copy-pasted problem
+- Renaming files to match the storage config
+- Shows a send button if there is a message in the text box
+- Stops using tmeasday:errors and use toastr instead
+- Support for delete uploaded files
+- Support for region and bucketUrl S3 configs
+- Support multiple upload file handlers
+- Support to upload files to S3
+- Trim slashes from Site_Url - closes #2462
+- Upload files to file system support
+
+## 0.21.0, 2016-Mar-07
+
+- Add ability for users to delete their own accounts
+- Add infinite scrolling to channels list
+- Add search bar to the channels flex
+- Add setting to allow/deny own account deletion
+- Allow numeric characters in the OAuth2 provider name
+- Allow post messages starting with slash
+- Allow prepareOutgoingRequestScript to stop execution and return a message
+- Blank channel when sending attachments as object
+- CAS Plugin: Use Meteor.users.services.cas.external_id to identify users instead of Meteor.users.username.
+- Defers user deletion
+- Delete MAINTAINERS.md
+- Disable E-mail Confirmation setting when SMTP is not set.
+- Do not add a value in both $set and $setOnInsert
+- Escapes regex in room search
+- Fix #766; Disable E-mail Confirmation setting when SMTP is not set.
+- Fixes #2399. Fixes bug with highlighted words which allowed an empty string to be defined as highlight.
+- Fixes #924. Admin users may now login without verifying their e-mails.
+- Fixes oauth registration deleting account with unverified e-mail
+- Improve last commit
+- Improve user search when adding in channels
+- Improves layout of new password requested
+- Init incoming webhook scripting
+- Init outgoing webhook scripting
+- Log error when trying to creat a user with no email via LDAP
+- Make channels list load faster by not getting full channel data, such as usernames.
+- Profile page improvements.
+- Removes loading animation overlay after pages are rendered.
+- Removes login_style setting of custom oauth.
+- Sharing recent excitement around CRM integrations
+- Shows OAuth Callback URLs
+- Support 'user_id' in addition to 'id' and 'ID' for service identifier
+
 ## 0.20.0, 2016-Feb-29
 
 - Ability to disable sending nickname and message via push notification
@@ -166,7 +345,7 @@
 - Enable editing via admin / users
 - Log error when trigger url returns 500
 - Bind starttls correctly for LDAP
-- Custom oAuth supporting json or plain content_types responses of the identity
+- Custom OAuth supporting json or plain content_types responses of the identity
 - Allow pass room id to direct rooms
 - Outgoing: Get the room from posted message to reply
 - Change Meteor.absoluteUrl to force SSL if Force_SSL is true
@@ -495,7 +674,7 @@
 - New RocketChat.RateLimiter
 - Favico.js update
 - Better RTL support
-- Remove custom oAuth record when removed from settings
+- Remove custom OAuth record when removed from settings
 - Improve Settings layout
 - Collapse sub groups of settings
 - Change translations in PT for False and True

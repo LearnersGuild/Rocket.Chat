@@ -2,7 +2,7 @@ roomFiles = new Mongo.Collection 'room_files'
 
 Template.uploadedFilesList.helpers
 	files: ->
-		return roomFiles.find({ rid: @rid }, { sort: { uploadedAt: -1 } }).fetch()
+		return roomFiles.find({ rid: @rid }, { sort: { uploadedAt: -1 } })
 
 	hasFiles: ->
 		return roomFiles.find({ rid: @rid }).count() > 0
@@ -25,6 +25,9 @@ Template.uploadedFilesList.helpers
 
 	canDelete: ->
 		return RocketChat.authz.hasAtLeastOnePermission('delete-message', @rid) or RocketChat.settings.get('Message_AllowDeleting') and @userId is Meteor.userId()
+
+	url: ->
+		return '/file-upload/' + @_id + '/' + @name
 
 Template.uploadedFilesList.events
 	'click .room-file-item': (e, t) ->
@@ -51,15 +54,15 @@ Template.uploadedFilesList.events
 				timer: 1000
 				showConfirmButton: false
 
-				# Check if the upload message for this file is currently loaded
-				msg = ChatMessage.findOne { file: { _id: self._id } }
-				RocketChat.models.Uploads.remove self._id, () ->
-					if msg
-						chatMessages[Session.get('openedRoom')].deleteMsg(msg);
-					else
-						Meteor.call 'deleteFileMessage', self._id, (error, result) ->
-							if error
-								return Errors.throw error.reason
+			# Check if the upload message for this file is currently loaded
+			msg = ChatMessage.findOne { file: { _id: self._id } }
+			RocketChat.models.Uploads.remove self._id, () ->
+				if msg
+					chatMessages[Session.get('openedRoom')].deleteMsg(msg);
+				else
+					Meteor.call 'deleteFileMessage', self._id, (error, result) ->
+						if error
+							return toastr.error error.reason
 
 	'scroll .content': _.throttle (e, t) ->
 		if e.target.scrollTop >= e.target.scrollHeight - e.target.clientHeight
@@ -76,4 +79,6 @@ Template.uploadedFilesList.onCreated ->
 				@hasMore.set false
 
 Template.uploadedFilesList.onRendered ->
-	$('.room-files-swipebox').swipebox()
+	$('.room-files-swipebox').swipebox({
+		hideBarsDelay: 0
+	})

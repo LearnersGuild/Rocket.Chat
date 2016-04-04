@@ -2,6 +2,11 @@ RocketChat.models.Users = new class extends RocketChat.models._Base
 	constructor: ->
 		@model = Meteor.users
 
+		@tryEnsureIndex { 'roles': 1 }, { sparse: 1 }
+		@tryEnsureIndex { 'name': 1 }
+		@tryEnsureIndex { 'lastLogin': 1 }
+		@tryEnsureIndex { 'status': 1 }
+
 
 	# FIND ONE
 	findOneById: (_id, options) ->
@@ -16,15 +21,6 @@ RocketChat.models.Users = new class extends RocketChat.models._Base
 	findOneByEmailAddress: (emailAddress, options) ->
 		query =
 			'emails.address': emailAddress
-
-		return @findOne query, options
-
-	findOneByVerifiedEmailAddress: (emailAddress, verified=true, options) ->
-		query =
-			emails:
-				$elemMatch:
-					address: emailAddress
-					verified: verified
 
 		return @findOne query, options
 
@@ -71,8 +67,15 @@ RocketChat.models.Users = new class extends RocketChat.models._Base
 
 		return @find query, options
 
+	findUsersByUsernamesWithHighlights: (username, options) ->
+		query =
+			username: username
+			'settings.preferences.highlights':
+				$exists: true
+
+		return @find query, options
+
 	findActiveByUsernameRegexWithExceptions: (username, exceptions = [], options = {}) ->
-		console.log 'findActiveByUsernameRegexWithExceptions', username, exceptions
 		if not _.isArray exceptions
 			exceptions = [ exceptions ]
 
@@ -83,21 +86,15 @@ RocketChat.models.Users = new class extends RocketChat.models._Base
 				{ username: { $nin: exceptions } }
 				{ username: usernameRegex }
 			]
-			# username: { $regex: usernameRegex, $nin: exceptions }
-			# username: { $nin: exceptions }
 
-		console.log 'findActiveByUsernameRegexWithExceptions query', JSON.stringify query, null, ' '
 		return @find query, options
 
-	findByActiveUsersNameOrUsername: (nameOrUsername, options) ->
+	findByActiveUsersUsernameExcept: (username, except, options) ->
 		query =
-			username:
-				$exists: 1
 			active: true
-
-			$or: [
-				{name: nameOrUsername}
-				{username: nameOrUsername}
+			$and: [
+				{username: {$nin: except}}
+				{username: username}
 			]
 
 		return @find query, options
@@ -175,6 +172,20 @@ RocketChat.models.Users = new class extends RocketChat.models._Base
 
 		return @update _id, update
 
+	setEmailVerified: (_id, email) ->
+		query =
+			_id: _id
+			emails:
+				$elemMatch:
+					address: email
+					verified: false
+
+		update =
+			$set:
+				'emails.$.verified': true
+
+		return @update query, update
+
 	setName: (_id, name) ->
 		update =
 			$set:
@@ -221,6 +232,17 @@ RocketChat.models.Users = new class extends RocketChat.models._Base
 		update =
 			$unset:
 				"requirePasswordChange" : true
+				"requirePasswordChangeReason" : true
+
+		return @update _id, update
+
+	resetPasswordAndSetRequirePasswordChange: (_id, requirePasswordChange, requirePasswordChangeReason) ->
+		update =
+			$unset:
+				"services.password": 1
+			$set:
+				"requirePasswordChange" : requirePasswordChange,
+				"requirePasswordChangeReason": requirePasswordChangeReason
 
 		return @update _id, update
 
@@ -272,15 +294,6 @@ RocketChat.models.Users = new class extends RocketChat.models._Base
 	# REMOVE
 	removeById: (_id) ->
 		return @remove _id
-
-	removeByUnverifiedEmail: (email) ->
-		query =
-			emails:
-				$elemMatch:
-					address: email
-					verified: false
-
-		return @remove query
 
 	###
 	Find users to send a message by email if:

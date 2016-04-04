@@ -4,7 +4,9 @@ loadMissedMessages = (rid) ->
 		return
 
 	Meteor.call 'loadMissedMessages', rid, lastMessage.ts, (err, result) ->
-		ChatMessage.upsert {_id: item._id}, item for item in result
+		for item in result
+			RocketChat.promises.run('onClientMessageReceived', item).then (item) ->
+				ChatMessage.upsert {_id: item._id}, item
 
 connectionWasOnline = true
 Tracker.autorun ->
@@ -82,6 +84,12 @@ RocketChat.Notifications.onUser 'message', (msg) ->
 	computation = Tracker.autorun ->
 		for typeName, record of openedRooms when record.active is true
 			do (typeName, record) ->
+
+				username = Meteor.user()?.username
+
+				unless username
+					return
+
 				record.sub = [
 					Meteor.subscribe 'room', typeName
 				]
@@ -99,7 +107,7 @@ RocketChat.Notifications.onUser 'message', (msg) ->
 						t: type
 
 					if type is 'd'
-						query.usernames = $all: [Meteor.user()?.username, name]
+						query.usernames = $all: [username, name]
 					else
 						query.name = name
 
@@ -118,17 +126,19 @@ RocketChat.Notifications.onUser 'message', (msg) ->
 							openedRooms[typeName].streamActive = true
 							msgStream.on openedRooms[typeName].rid, (msg) ->
 
-								# Should not send message to room if room has not loaded all the current messages
-								if RoomHistoryManager.hasMoreNext(openedRooms[typeName].rid) is false
+								RocketChat.promises.run('onClientMessageReceived', msg).then (msg) ->
 
-									# Do not load command messages into channel
-									if msg.t isnt 'command'
-										ChatMessage.upsert { _id: msg._id }, msg
+									# Should not send message to room if room has not loaded all the current messages
+									if RoomHistoryManager.hasMoreNext(openedRooms[typeName].rid) is false
 
-									Meteor.defer ->
-										RoomManager.updateMentionsMarksOfRoom typeName
+										# Do not load command messages into channel
+										if msg.t isnt 'command'
+											ChatMessage.upsert { _id: msg._id }, msg
 
-									RocketChat.callbacks.run 'streamMessage', msg
+										Meteor.defer ->
+											RoomManager.updateMentionsMarksOfRoom typeName
+
+										RocketChat.callbacks.run 'streamMessage', msg
 
 							RocketChat.Notifications.onRoom openedRooms[typeName].rid, 'deleteMessage', onDeleteMessageStream
 
@@ -143,6 +153,11 @@ RocketChat.Notifications.onUser 'message', (msg) ->
 		roomsToClose = _.sortBy(_.values(openedRooms), 'lastSeen').reverse().slice(maxRoomsOpen)
 		for roomToClose in roomsToClose
 			close roomToClose.typeName
+
+
+	closeAllRooms = ->
+		for key, openedRoom of openedRooms
+			close openedRoom.typeName
 
 
 	open = (typeName) ->
@@ -228,6 +243,7 @@ RocketChat.Notifications.onUser 'message', (msg) ->
 
 	open: open
 	close: close
+	closeAllRooms: closeAllRooms
 	init: init
 	getDomOfRoom: getDomOfRoom
 	existsDomOfRoom: existsDomOfRoom
@@ -237,3 +253,7 @@ RocketChat.Notifications.onUser 'message', (msg) ->
 	onlineUsers: onlineUsers
 	updateMentionsMarksOfRoom: updateMentionsMarksOfRoom
 	getOpenedRoomByRid: getOpenedRoomByRid
+
+
+RocketChat.callbacks.add 'afterLogoutCleanUp', ->
+	RoomManager.closeAllRooms()

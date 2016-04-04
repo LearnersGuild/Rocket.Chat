@@ -103,10 +103,14 @@ class CustomOAuth
 			if identity?.ID and not identity.id
 				identity.id = identity.ID
 
+			# Fix Auth0-like identities having 'user_id' instead of 'id'
+			if identity?.user_id and not identity.id
+				identity.id = identity.user_id
+
 			console.log 'id:', JSON.stringify identity, null, '  '
 
 			serviceData =
-				_oAuthCustom: true
+				_OAuthCustom: true
 				accessToken: accessToken
 
 			_.extend serviceData, identity

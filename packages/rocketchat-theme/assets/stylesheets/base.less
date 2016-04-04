@@ -27,6 +27,10 @@
 	user-select: text;
 }
 
+.text-right {
+	text-align: right;
+}
+
 .no-scroll {
 	overflow: hidden !important;
 }
@@ -269,6 +273,10 @@ blockquote {
 			font-size: 11px;
 		}
 	}
+	.logoutOthers {
+		text-align: right;
+	}
+
 	.submit {
 		margin-top: 20px;
 		text-align: right;
@@ -300,13 +308,7 @@ blockquote {
 		margin-bottom: 0;
 	}
 	&.search {
-		.octicon {
-			position: absolute;
-			left: 10px;
-			top: 10px;
-			font-weight: 400;
-		}
-		.icon-spin4 {
+		.icon-spin {
 			position: absolute;
 			right: 5px;
 			top: 10px;
@@ -330,7 +332,8 @@ blockquote {
 			animation-timing-function: linear;
 		}
 		.icon-search,
-		.icon-right-open-small {
+		.icon-right-open-small,
+		.icon-sort-alt-up, .icon-comment {
 			position: absolute;
 			left: 2px;
 			top: 10px;
@@ -342,6 +345,16 @@ blockquote {
 	> label {
 		display: block;
 		margin-bottom: 4px;
+	}
+	> div {
+		position: relative;
+
+		.right {
+			position: absolute;
+			right: 10px;
+			top: 10px;
+			z-index: 10;
+		}
 	}
 	input[type='text'] {
 		display: block;
@@ -461,6 +474,8 @@ input[type='email'],
 input[type='url'],
 input[type='password'] {
 	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 	height: 35px;
 	line-height: normal;
 	border: 1px solid;
@@ -547,7 +562,7 @@ textarea[disabled] {
 		&:after {
 			content: " ";
 			visibility: visible;
-			background-image: url('/images/logo/loading.gif');
+			background-image: url('images/logo/loading.gif');
 			background-position: center;
 			background-repeat: no-repeat;
 			display: block;
@@ -595,7 +610,7 @@ label.required:after {
 }
 
 .loading {
-	background-image: url('/images/loading.gif');
+	background-image: url('images/loading.gif');
 	background-repeat: no-repeat;
 	background-position: 50%;
 	width: 100%;
@@ -1222,13 +1237,22 @@ a.github-fork {
 		display: block;
 		-webkit-overflow-scrolling: touch;
 		box-shadow: 0 0 5px rgba(0, 0, 0, 0.4) inset;
-		padding: 35px 10px;
+		padding: 20px 10px;
 		.transition-delay(.135s);
 		&.no-shadow {
 			box-shadow: 0 0 0;
 		}
 		> .wrapper {
 			direction: ltr;
+
+			.flex-control {
+				margin-bottom: 30px;
+
+				.search {
+					width: 100%;
+					margin-bottom: 10px;
+				}
+			}
 		}
 		h4 {
 			margin-bottom: 30px;
@@ -1255,7 +1279,11 @@ a.github-fork {
 			box-shadow: 0 0 0;
 			border-radius: 0;
 			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
 			-webkit-border-radius: 0px;
+			-moz-border-radius: 0px;
+			border-radius: 0px;
 		}
 	}
 	.input-submit {
@@ -1523,6 +1551,11 @@ a.github-fork {
 			}
 			.icon-logout {
 				margin-left: 1px;
+			}
+
+			&.fixed {
+				opacity: 1;
+				.transform(translateX(0));
 			}
 		}
 		i {
@@ -2118,7 +2151,6 @@ a.github-fork {
 	flex-direction: column;
 
 	> div {
-		height: 24px;
 		line-height: 24px;
 		padding: 0 10px;
 		border-top: 1px solid;
@@ -2128,12 +2160,12 @@ a.github-fork {
 		}
 	}
 
+	font-size: 12px;
+
 	.upload-progress {
+		height: 24px;
 		position: relative;
 		text-shadow: 1px 1px 0px rgba(0,0,0,.2);
-
-		&.upload-error {
-		}
 
 		.upload-progress-progress {
 			position: absolute;
@@ -2155,20 +2187,14 @@ a.github-fork {
 			> a {
 				float: right;
 				text-transform: uppercase;
-
-				&:hover {
-					cursor: pointer;
-				}
+				text-shadow: none;
+				cursor: pointer;
 			}
 		}
 	}
 
 	.unread-bar {
 		background-color: #E6F4FD;
-		// line-height: 30px;
-		// font-size: 12px;
-		// padding: 0 10px;
-		// box-shadow: 0px 1px 2px rgba(0,0,0,.2);
 		color: #068FE4;
 		text-transform: uppercase;
 		text-align: center;
@@ -2181,8 +2207,16 @@ a.github-fork {
 			}
 		}
 
+		.unread-count {
+			display: none;
+		}
+
 		> a.jump-to {
 			float: left;
+
+			.jump-to-small {
+				display: none;
+			}
 
 			&:hover {
 				cursor: pointer;
@@ -2292,6 +2326,12 @@ a.github-fork {
 			.input-message-container {
 				position: relative;
 				width: 100%;
+
+				.inner-right-toolbar {
+					position: absolute;
+					right: 10px;
+					top: 10px;
+				}
 			}
 			> .file {
 				width: 44px;
@@ -2304,6 +2344,11 @@ a.github-fork {
 				border-right: none;
 				cursor: pointer;
 				.transition(background-color 0.1s linear, color 0.1s linear);
+
+				i.file {
+					font-size: 18px;
+					vertical-align: text-bottom;
+				}
 
 				&:hover {
 				}
@@ -2323,17 +2368,42 @@ a.github-fork {
 					cursor: pointer;
 				}
 			}
-			> .mic, .stop-mic {
+		}
+		.message-buttons {
+			padding-left: 4px;
+
+			.mic, .stop-mic {
 				width: 40px;
 				font-size: 22px;
+				height: 36px;
 				padding: 7px 0;
-				margin-left: 4px;
 				text-align: center;
 				cursor: pointer;
 				border-radius: 30px;
-				.transition(background-color 0.1s linear, color 0.1s linear);
-				&:hover {
+				display: none;
+			}
+
+			&.show-mic .mic, &.show-mic .stop-mic {
+				display: inline-block;
+			}
+
+			.send-button {
+				position: inherit;
+				width: 40px;
+				font-size: 20px;
+				height: 36px;
+				padding: 7px 0;
+				text-align: center;
+				cursor: pointer;
+				border-radius: 30px;
+				display: none;
+				i {
+					margin-right: 2px;
 				}
+			}
+
+			&.show-send .send-button {
+				display: inline-block;
 			}
 		}
 		textarea {
@@ -2348,16 +2418,6 @@ a.github-fork {
 			resize: none;
 			line-height: 16px;
 			&.editing {
-			}
-		}
-		.icon-paper-plane {
-			position: absolute;
-			top: 2px;
-			right: 0px;
-			cursor: pointer;
-			padding: 8px;
-			font-size: 16px;
-			&:hover {
 			}
 		}
 		.users-typing {
@@ -2654,10 +2714,9 @@ a.github-fork {
 		z-index: 1000;
 		display: none;
 		background-color: #fff;
-		border: 1px solid #eee;
 		border-radius: 4px;
 		overflow: hidden;
-		box-shadow: 1px 1px 4px #B3B3B3;
+		box-shadow: 0px 1px 1px 0 rgba(0,0,0,0.2), 0 2px 10px 0 rgba(0,0,0,.16);
 		transition: transform .15s ease-in-out, opacity .15s ease-in-out;
 		animation: dropdown-in .15s ease-in-out;
 
@@ -3855,7 +3914,7 @@ a.github-fork {
 		bottom: 20px;
 		width: 100px;
 		height: 50px;
-		background: url(/images/meteor.png) no-repeat center center;
+		background: url(images/meteor.png) no-repeat center center;
 		background-size: 100% auto;
 		text-indent: -9999em;
 	}
@@ -3889,7 +3948,9 @@ a.github-fork {
 }
 
 .highlight-text {
-  background: #F1DD7A none repeat scroll 0% 0%;
+	background: #ADD6FF;
+	border-radius: 4px;
+	padding: 2px;
 }
 
 .avatar-suggestions {
@@ -4174,7 +4235,7 @@ a.github-fork {
 .message-popup-results {
 	&.notready {
 		.message-popup-items {
-			background-image: url(/images/logo/loading.gif);
+			background-image: url(images/logo/loading.gif);
 			background-repeat: no-repeat;
 			background-position: 50% 50%;
 			height: 100px;
@@ -4555,6 +4616,127 @@ a.github-fork {
 		}  20% {
 			transform: scaleY(1.0);
 			-webkit-transform: scaleY(1.0);
+		}
+	}
+}
+
+.code-error-box {
+	.title {
+		background: red;
+		color: white;
+		padding: 5px;
+		font-size: 16px;
+		font-weight: bold;
+		margin-top: 5px;
+	}
+
+	pre {
+		font-size: 12px;
+		font-weight: bold;
+		padding: 6px;
+		background: rgb(255, 243, 243);
+		color: red;
+		border-left: 3px solid red;
+	}
+}
+
+.code-mirror-box {
+	.title {
+		display: none;
+	}
+
+	.button-fullscreen {
+		display: initial;
+	}
+
+	.button-restore {
+		display: none;
+	}
+
+	.buttons {
+		text-align: right;
+		background-color: #F7F7F7;
+		border: 1px solid #ddd;
+		border-width: 0px 1px 1px 1px;
+	}
+
+	.CodeMirror {
+		border: 1px solid #ddd;
+	}
+
+	&.code-mirror-box-fullscreen {
+		height: auto;
+		position: fixed;
+		top: 61px;
+		bottom: 0;
+		z-index: 100;
+		width: auto;
+		right: 40px;
+		left: 260px;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		background-color: white;
+
+		.buttons {
+			border: none;
+		}
+
+		.title {
+			display: initial;
+			padding-left: 10px;
+			font-size: 16px;
+			background-color: #F7F7F7;
+			line-height: 30px;
+		}
+
+		.button-fullscreen {
+			display: none;
+		}
+
+		.button-restore {
+			display: initial;
+		}
+
+		.CodeMirror {
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+
+			.CodeMirror-scroll {
+				flex-grow: 1;
+			}
+		}
+	}
+}
+
+.sweet-alert .sa-input-error {
+	top: 19px;
+}
+
+@media all and(max-width: 780px) {
+	.code-mirror-box-fullscreen {
+		.CodeMirror {
+			left: 0;
+		}
+	}
+
+	.container-bars {
+		.unread-bar {
+			.unread-count {
+				display: inline-block;
+			}
+			.unread-count-since {
+				display: none;
+			}
+			> a.jump-to {
+				.jump-to-small {
+					display: inline-block;
+				}
+				.jump-to-large {
+					display: none;
+				}
+			}
 		}
 	}
 }

@@ -32,6 +32,7 @@ Template.admin.helpers
 		group = FlowRouter.getParam('group')
 		group ?= TempSettings.findOne({ type: 'group' })?._id
 		return TempSettings.findOne { _id: group, type: 'group' }
+
 	sections: ->
 		group = FlowRouter.getParam('group')
 		group ?= TempSettings.findOne({ type: 'group' })?._id
@@ -72,6 +73,10 @@ Template.admin.helpers
 
 		return if found is enableQuery.length then {} else {disabled: 'disabled'}
 
+	isReadonly: ->
+		if @readonly is true
+			return { readonly: 'readonly' }
+
 	hasChanges: (section) ->
 		group = FlowRouter.getParam('group')
 
@@ -98,26 +103,75 @@ Template.admin.helpers
 
 	flexOpened: ->
 		return 'opened' if RocketChat.TabBar.isFlexOpen()
+
 	arrowPosition: ->
 		console.log 'room.helpers arrowPosition' if window.rocketDebug
 		return 'left' unless RocketChat.TabBar.isFlexOpen()
+
 	label: ->
 		label = @i18nLabel or @_id
 		return TAPi18n.__ label if label
+
 	description: ->
 		description = TAPi18n.__ @i18nDescription if @i18nDescription
 		if description? and description isnt @i18nDescription
 			return description
-	sectionIsCustomOath: (section) ->
+
+	sectionIsCustomOAuth: (section) ->
 		return /^Custom OAuth:\s.+/.test section
+
 	callbackURL: (section) ->
 		id = s.strRight(section, 'Custom OAuth: ').toLowerCase()
 		return Meteor.absoluteUrl('_oauth/' + id)
+
+	relativeUrl: (url) ->
+		return Meteor.absoluteUrl(url)
+
 	selectedOption: (_id, val) ->
 		return RocketChat.settings.get(_id) is val
 
 	random: ->
 		return Random.id()
+
+	getEditorOptions: ->
+		return {} =
+			lineNumbers: true
+			mode: this.code or "javascript"
+			gutters: [
+				"CodeMirror-linenumbers"
+				"CodeMirror-foldgutter"
+			]
+			foldGutter: true
+			matchBrackets: true
+			autoCloseBrackets: true
+			matchTags: true,
+			showTrailingSpace: true
+			highlightSelectionMatches: true
+
+	setEditorOnBlur: (_id) ->
+		Meteor.defer ->
+			codeMirror = $('.code-mirror-box[data-editor-id="'+_id+'"] .CodeMirror')[0].CodeMirror
+			if codeMirror.changeAdded is true
+				return
+
+			onChange = ->
+				value = codeMirror.getValue()
+				TempSettings.update {_id: _id},
+					$set:
+						value: value
+						changed: Settings.findOne(_id).value isnt value
+
+			onChangeDelayed = _.debounce onChange, 500
+
+			codeMirror.on 'change', onChangeDelayed
+			codeMirror.changeAdded = true
+
+		return
+
+	assetAccept: (fileConstraints) ->
+		if fileConstraints.extensions?.length > 0
+			return '.' + fileConstraints.extensions.join(', .')
+
 
 Template.admin.events
 	"change .input-monitor": (e, t) ->
@@ -193,8 +247,8 @@ Template.admin.events
 	"click .delete-asset": ->
 		Meteor.call 'unsetAsset', @asset
 
-	"change input[type=file]": ->
-		e = event.originalEvent or event
+	"change input[type=file]": (ev) ->
+		e = ev.originalEvent or ev
 		files = e.target.files
 		if not files or files.length is 0
 			files = e.dataTransfer?.files or []
@@ -220,6 +274,8 @@ Template.admin.events
 	"click .expand": (e) ->
 		$(e.currentTarget).closest('.section').removeClass('section-collapsed')
 		$(e.currentTarget).closest('button').removeClass('expand').addClass('collapse').find('span').text(TAPi18n.__ "Collapse")
+		$('.code-mirror-box .CodeMirror').each (index, codeMirror) ->
+			codeMirror.CodeMirror.refresh()
 
 	"click .collapse": (e) ->
 		$(e.currentTarget).closest('.section').addClass('section-collapsed')
@@ -237,6 +293,16 @@ Template.admin.events
 			args = [data.message].concat data.params
 
 			toastr.success TAPi18n.__.apply(TAPi18n, args), TAPi18n.__('Success')
+
+	"click .button-fullscreen": ->
+		codeMirrorBox = $('.code-mirror-box[data-editor-id="'+this._id+'"]')
+		codeMirrorBox.addClass('code-mirror-box-fullscreen')
+		codeMirrorBox.find('.CodeMirror')[0].CodeMirror.refresh()
+
+	"click .button-restore": ->
+		codeMirrorBox = $('.code-mirror-box[data-editor-id="'+this._id+'"]')
+		codeMirrorBox.removeClass('code-mirror-box-fullscreen')
+		codeMirrorBox.find('.CodeMirror')[0].CodeMirror.refresh()
 
 
 Template.admin.onRendered ->

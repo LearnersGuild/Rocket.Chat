@@ -3,22 +3,29 @@
 		<form class="message-form" method="post" action="/">
 			<div style="display: flex">
 				<div class="file">
-					<i class="octicon octicon-cloud-upload file"></i>
+					<i class="icon-attach file"></i>
 					<input type="file" accept="{{fileUploadAllowedMediaTypes}}">
 				</div>
 				<div class="input-message-container">
 					{{> messagePopupConfig getPopupConfig}}
 					<textarea dir="auto" name="msg" maxlength="{{maxMessageLength}}" class="input-message autogrow-short" placeholder="{{_ 'Message'}}"></textarea>
+
+					<div class="inner-right-toolbar">
+						<i class="emoji-picker-icon icon-people"></i>
+					</div>
 				</div>
 
-				{{#if canRecordAudio}}
+				<div class="message-buttons {{showMic}} {{showSend}}">
 					<div class="mic">
 						<i class="icon-mic" aria-label="{{_ "Record"}}"></i>
 					</div>
 					<div class="stop-mic hidden">
 						<i class="icon-stop" aria-label="{{_ "Stop_Recording"}}"></i>
 					</div>
-				{{/if}}
+					<div class="send-button">
+						<i class="icon-paper-plane" aria-label="{{_ "Send"}}"></i>
+					</div>
+				</div>
 			</div>
 			<div class="users-typing">
 				{{#with usersTyping}}

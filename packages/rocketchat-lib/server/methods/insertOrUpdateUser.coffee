@@ -44,16 +44,22 @@ Meteor.methods
 				createUser.email = userData.email
 
 			_id = Accounts.createUser(createUser)
+
+			updateUser =
+				$set:
+					name: userData.name
+
 			if userData.requirePasswordChange
-				Meteor.users.update { _id: _id }, { $set: { name: userData.name, requirePasswordChange: userData.requirePasswordChange } }
+				updateUser.$set.requirePasswordChange = userData.requirePasswordChange
+
+			Meteor.users.update { _id: _id }, updateUser
 
 			return _id
 		else
 			#update user
 			Meteor.users.update { _id: userData._id }, { $set: { name: userData.name, requirePasswordChange: userData.requirePasswordChange } }
-
-			Meteor.runAsUser userData._id, ->
-				Meteor.call 'setUsername', userData.username
+			RocketChat.setUsername userData._id, userData.username
+			RocketChat.setEmail userData._id, userData.email
 
 			canEditUserPassword = RocketChat.authz.hasPermission( user._id, 'edit-other-user-password')
 			if canEditUserPassword and userData.password.trim()

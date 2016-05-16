@@ -91,8 +91,7 @@ The easiest way to test changes locally (that I've found so far) is to:
 
 2. Then, create a symbolic link from your clone of the git repository of the package into the `packages` directory:
 
-        $ cd packages
-        $ ln -s ../../rocketchat-lg-slash-commands .
+        $ ln -s ../../rocketchat-lg-slash-commands packages
 
 3. Then, re-add the package (it will check the `/packages` folder first):
 

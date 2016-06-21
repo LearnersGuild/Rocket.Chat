@@ -13,3 +13,5 @@ done
 echo "Starting Meteor"
 
 meteor
+
+cd -

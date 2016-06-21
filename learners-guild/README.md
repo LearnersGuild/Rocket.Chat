@@ -79,24 +79,21 @@ In order to maintain our own sanity, rather than making lots and lots of changes
 
 This package is how we integrate our SSO functionality (via [idm][idm]) into Rocket.Chat / Meteor.
 
+## [learnersguild:rocketchat-lg-api-extensions][rocketchat-lg-api-extensions]
+
+This package contains custom API extensions for Rocket.Chat within Learners Guild.
+
 ## [learnersguild:rocketchat-lg-slash-commands][rocketchat-lg-slash-commands]
 
 This package contains all of our custom `/slash` commands that interface with our Learners Guild services. For example, `/profile` and `/vote`.
 
 The easiest way to test changes locally (that I've found so far) is to:
 
-1. First, uninstall the package, e.g.:
+1. Uninstall the custom package(s)
 
-        $ meteor remove learnersguild:rocketchat-lg-slash-commands
+2. Create a symbolic link from your clone of the package's git repository into the `packages` directory
 
-2. Then, create a symbolic link from your clone of the git repository of the package into the `packages` directory:
-
-        $ cd packages
-        $ ln -s ../../rocketchat-lg-slash-commands .
-
-3. Then, re-add the package (it will check the `/packages` folder first):
-
-        $ meteor add learnersguild:rocketchat-lg-slash-commands
+3. Re-add the package(s) (it will look for them in the `/packages` folder first):
 
 4. At this point, any changes you make in your cloned repository will cause the Meteor server to restart and the client to reload (which, on Meteor 1.2, takes forever). Once you're confident that things are working, you should bump the version number (using good [semver][semver] practices), publish the package to meteor, and reverse the process you did above:
 
@@ -112,7 +109,13 @@ The easiest way to test changes locally (that I've found so far) is to:
 
     When you re-add the package, be sure that it gets your _newer_ version. I've noticed that sometimes it does and sometimes it doesn't. In the worst case, you can edit the `.meteor/versions` file yourself.
 
+Steps 1-3 for all custom packages can be done by simply executing the provided update script:
 
+```
+$ learnersguild/update.sh
+```
+
+Make sure you've cloned each package's repo from github into the same directory as the `echo-chat` clone. **Note that this will currently pull the `master` branch for each of those repos**, so if you'd like to incorporate changes in any of those repos that haven't already been merged to master on github, you'll want to update any packages  manually.
 
 
 [mehserve]: https://github.com/timecounts/mehserve

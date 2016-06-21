@@ -10,6 +10,10 @@ echo "Git: Pulling rocketchat-ls-slash-commands"
 cd ../rocketchat-lg-slash-commands
 git pull origin master
 
+echo "Git: Pulling rocketchat-lg-api-extensions"
+cd ../rocketchat-lg-api-extensions
+git pull origin master
+
 echo "Meteor: Removing packages"
 cd ../echo-chat
 echo "Meteor: Removing learnersguild:rocketchat-lg-sso"

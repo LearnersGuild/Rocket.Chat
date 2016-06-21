@@ -117,11 +117,35 @@ $ learnersguild/update.sh
 
 Make sure you've cloned each package's repo from github into the same directory as the `echo-chat` clone. **Note that this will currently pull the `master` branch for each of those repos**, so if you'd like to incorporate changes in any of those repos that haven't already been merged to master on github, you'll want to update any packages  manually.
 
+## Troubleshooting
+
+- Issue: attempting to update dependencies results in this error:
+  ```
+  essjay:echo-chat essjay-lg$ meteor add learnersguild:rocketchat-lg-sso
+  learnersguild:rocketchat-lg-sso: updating npm dependencies -- @learnersguild/idm-jwt-auth...
+   => Errors while adding packages:
+
+  While building package learnersguild:rocketchat-lg-sso:
+  error: couldn't install npm package @learnersguild/idm-jwt-auth@0.2.4: Command failed: npm ERR! 404 Not Found
+  npm ERR! 404
+  npm ERR! 404 'learnersguild/idm-jwt-auth' is not in the npm registry.
+  npm ERR! 404 You should bug the author to publish it
+  npm ERR! 404
+  npm ERR! 404 Note that you can also install from a
+  npm ERR! 404 tarball, folder, or http url, or git url.
+  ```
+
+  You might have run into an issue with installing scoped packages from NPM and incompatibility with the version of NPM used by meteor. Try updating it:
+  ```
+  cd ~/.meteor/packages/meteor-tool/1.1.*/mt-*/dev_bundle/lib
+  ../bin/npm install npm
+  ```
 
 [mehserve]: https://github.com/timecounts/mehserve
 [meteor]: https://www.meteor.com/
 [rocket-chat-pr]: https://github.com/RocketChat/Rocket.Chat/pulls
 [idm]: https://github.com/LearnersGuild/idm
 [rocketchat-lg-sso]: https://github.com/LearnersGuild/rocketchat-lg-sso
+[rocketchat-lg-api-extensions]: https://github.com/LearnersGuild/rocketchat-lg-api-extensions
 [rocketchat-lg-slash-commands]: https://github.com/LearnersGuild/rocketchat-lg-slash-commands
 [semver]: http://semver.org/

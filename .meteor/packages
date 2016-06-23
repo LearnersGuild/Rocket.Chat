@@ -147,6 +147,6 @@ todda00:friendly-slugs
 underscorestring:underscore.string
 yasaricli:slugify
 yasinuslu:blaze-meta
-learnersguild:rocketchat-lg-slash-commands
-learnersguild:rocketchat-lg-sso
 learnersguild:rocketchat-lg-api-extensions
+learnersguild:rocketchat-lg-sso
+learnersguild:rocketchat-lg-slash-commands

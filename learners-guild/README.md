@@ -113,28 +113,19 @@ This package contains all of our custom `/slash` commands that interface with ou
 
 The easiest way to test changes locally (that I've found so far) is to:
 
-1. Uninstall the custom package(s)
+1. Create a symbolic link from your clone of the package's git repository into the `packages` directory
 
-2. Create a symbolic link from your clone of the package's git repository into the `packages` directory
-
-3. Re-add the package(s) (it will look for them in the `/packages` folder first):
-
-4. At this point, any changes you make in your cloned repository will cause the Meteor server to restart and the client to reload (which, on Meteor 1.2, takes forever). Once you're confident that things are working, you should bump the version number (using good [semver][semver] practices), publish the package to meteor, and reverse the process you did above:
+2. Add the package(s) (it will look for them in the `/packages` folder first):
 
 ```bash
-meteor remove learnersguild:rocketchat-lg-slash-commands
-rm packages/rocketchat-lg-slash-commands
-cd ../rocketchat-lg-slash-commands
-#
-# BUMP VERSION IN package.js
-#
-cd ../Rocket.Chat
+meteor add learnersguild:rocketchat-lg-sso
+meteor add learnersguild:rocketchat-lg-api-extensions
 meteor add learnersguild:rocketchat-lg-slash-commands
 ```
 
-When you re-add the package, be sure that it gets your _newer_ version. I've noticed that sometimes it does and sometimes it doesn't. In the worst case, you can edit the `.meteor/versions` file yourself.
+3. At this point, any changes you make in your cloned repository will cause the Meteor server to restart and the client to reload (which, on Meteor 1.2, takes forever). Once you're confident that things are working, you should bump the version number (using good [semver][semver] practices), and push. CI will make sure the packages get published.
 
-Steps 1-3 for all custom packages can be done by simply executing the provided update script:
+There's a script that should handle this for you automatically as long as you have the repositories checked out parallel to `echo-chat`:
 
 ```bash
 learnersguild/update.sh

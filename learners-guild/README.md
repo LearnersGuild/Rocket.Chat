@@ -10,65 +10,89 @@ This is Learners Guild's custom fork of Rocket.Chat. The primary difference is t
 
 3. Setup and run [mehserve][mehserve]. Then figure out which port you intend to use and create the mehserve config file:
 
-        $ echo 3000 > ~/.mehserve/echo.learnersguild
+```bash
+echo 3000 > ~/.mehserve/echo.learnersguild
+```
 
 4. Set your `NODE_ENV` environment variable:
 
-        $ export NODE_ENV=development
+```bash
+export NODE_ENV=development
+```
 
 5. Create your `.env` file for your environment. Example:
 
-        ROOT_URL=http://echo.learnersguild.dev/
-        CHAT_API_USER_SECRET='s3cr3t-p@ssw0rd'
-        JWT_PUBLIC_KEY="<IDM PUBLIC KEY (let it
-        span
-        multiple
-        lines)>
-        "
+```bash
+ROOT_URL=http://echo.learnersguild.dev/
+CHAT_API_USER_SECRET='s3cr3t-p@ssw0rd'
+JWT_PUBLIC_KEY="<IDM PUBLIC KEY (let it
+span
+multiple
+lines)>
+"
+```
 
 6. Install [Meteor][meteor]
 
-        $ curl https://install.meteor.com/ | sh
+```bash
+curl https://install.meteor.com/ | sh
+```
 
 7. Run the server:
 
-        $ learners-guild/start.sh
+```bash
+learners-guild/start.sh
+```
 
 ## Need to send a PR Upstream?
 
 1. First, make sure we are tracking `upstream` via git:
 
-        $ git remote add upstream git@github.com:RocketChat/Rocket.Chat.git
-        $ git remote update
+```bash
+git remote add upstream git@github.com:RocketChat/Rocket.Chat.git
+git remote update
+```
 
 2. Then, make sure our `develop` branch is sync'ed with `upstream`. If it's your first time:
 
-        $ git checkout -b develop origin/develop
+```bash
+git checkout -b develop origin/develop
+```
 
      If you've already worked from the `develop` branch before:
 
-        $ git checkout develop
+```bash
+git checkout develop
+```
 
 3. Merge any changes from `upstream`:
 
-        $ git merge upstream/develop
+```bash
+git merge upstream/develop
+```
 
 4. Create a branch for your fix. Replace `YOUR_BRANCH_NAME` with something sensible, like your initials followed by the fix you're making, e.g., `jw/fix-double-notifications`:
 
-        $ git checkout -b YOUR_BRANCH_NAME
+```bash
+git checkout -b YOUR_BRANCH_NAME
+```
 
 5. Make your changes. Test them. Commit to your branch, then push to origin:
 
-        $ git push -u origin YOUR_BRANCH_NAME
+```bash
+git push -u origin YOUR_BRANCH_NAME
+```
 
 6. Then go [submit the pull request on Rocket.Chat upstream][rocket-chat-pr].
 
 7. No need to wait for Rocket.Chat to merge-in your changes. In the meantime you can merge your branch with the branch from which we deploy, `lg-master`:
 
-        $ git checkout lg-master
-        $ git merge YOUR_BRANCH_NAME
-        $ git push
-        $ git push heroku lg-master:master
+```bash
+git checkout lg-master
+git merge YOUR_BRANCH_NAME
+git push
+git push heroku lg-master:master
+```
 
 
 ## Differences from Upstream
@@ -89,30 +113,22 @@ This package contains all of our custom `/slash` commands that interface with ou
 
 The easiest way to test changes locally (that I've found so far) is to:
 
-1. Uninstall the custom package(s)
+1. Create a symbolic link from your clone of the package's git repository into the `packages` directory
 
-2. Create a symbolic link from your clone of the package's git repository into the `packages` directory
+2. Add the package(s) (it will look for them in the `/packages` folder first):
 
-3. Re-add the package(s) (it will look for them in the `/packages` folder first):
-
-4. At this point, any changes you make in your cloned repository will cause the Meteor server to restart and the client to reload (which, on Meteor 1.2, takes forever). Once you're confident that things are working, you should bump the version number (using good [semver][semver] practices), publish the package to meteor, and reverse the process you did above:
-
-        $ meteor remove learnersguild:rocketchat-lg-slash-commands
-        $ rm packages/rocketchat-lg-slash-commands
-        $ cd ../rocketchat-lg-slash-commands
-        #
-        # BUMP VERSION IN package.js
-        #
-        $ meteor publish
-        $ cd ../Rocket.Chat
-        $ meteor add learnersguild:rocketchat-lg-slash-commands
-
-    When you re-add the package, be sure that it gets your _newer_ version. I've noticed that sometimes it does and sometimes it doesn't. In the worst case, you can edit the `.meteor/versions` file yourself.
-
-Steps 1-3 for all custom packages can be done by simply executing the provided update script:
-
+```bash
+meteor add learnersguild:rocketchat-lg-sso
+meteor add learnersguild:rocketchat-lg-api-extensions
+meteor add learnersguild:rocketchat-lg-slash-commands
 ```
-$ learnersguild/update.sh
+
+3. At this point, any changes you make in your cloned repository will cause the Meteor server to restart and the client to reload (which, on Meteor 1.2, takes forever). Once you're confident that things are working, you should bump the version number (using good [semver][semver] practices), and push. CI will make sure the packages get published.
+
+There's a script that should handle this for you automatically as long as you have the repositories checked out parallel to `echo-chat`:
+
+```bash
+learnersguild/update.sh
 ```
 
 Make sure you've cloned each package's repo from github into the same directory as the `echo-chat` clone. **Note that this will currently pull the `master` branch for each of those repos**, so if you'd like to incorporate changes in any of those repos that haven't already been merged to master on github, you'll want to update any packages  manually.

@@ -2,6 +2,10 @@
 
 This is Learners Guild's custom fork of Rocket.Chat. The primary difference is the presence of a few custom plugins, a small startup script, and this readme.
 
+## Production Monitoring
+
+Production monitoring for this service is via [kadira][kadira].
+
 ## Getting Started
 
 1. Clone the repository.
@@ -165,3 +169,4 @@ Make sure you've cloned each package's repo from github into the same directory 
 [rocketchat-lg-api-extensions]: https://github.com/LearnersGuild/rocketchat-lg-api-extensions
 [rocketchat-lg-slash-commands]: https://github.com/LearnersGuild/rocketchat-lg-slash-commands
 [semver]: http://semver.org/
+[kadira]: https://ui.kadira.io/

@@ -87,6 +87,7 @@ meteor-developer@1.1.5
 meteorhacks:fast-render@2.13.0
 meteorhacks:inject-data@2.0.0
 meteorhacks:inject-initial@1.0.4
+meteorhacks:kadira@2.29.1
 meteorhacks:meteorx@1.4.1
 meteorhacks:picker@1.0.3
 meteorspark:util@0.2.0

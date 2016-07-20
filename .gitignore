@@ -68,3 +68,6 @@ ecosystem.json
 pm2.json
 settings.json
 build.sh
+
+# LG-specific
+packages/rocketchat-lg-*/.npm

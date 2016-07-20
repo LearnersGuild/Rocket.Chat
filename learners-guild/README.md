@@ -8,23 +8,25 @@ Production monitoring for this service is via [kadira][kadira].
 
 ## Getting Started
 
-1. Clone the repository.
+1. **IMPORTANT:** Be sure to first set up the [idm][idm] and [game][game] services.
 
-2. Checkout the `lg-master` branch (if not checked out by default).
+2. Clone the repository.
 
-3. Setup and run [mehserve][mehserve]. Then figure out which port you intend to use and create the mehserve config file:
+3. Checkout the `lg-master` branch (if not checked out by default).
+
+4. Setup and run [mehserve][mehserve]. Then figure out which port you intend to use and create the mehserve config file:
 
 ```bash
 echo 3000 > ~/.mehserve/echo.learnersguild
 ```
 
-4. Set your `NODE_ENV` environment variable:
+5. Set your `NODE_ENV` environment variable:
 
 ```bash
 export NODE_ENV=development
 ```
 
-5. Create your `.env` file for your environment. Example:
+6. Create your `.env` file for your environment. Example:
 
 ```bash
 ROOT_URL=http://echo.learnersguild.dev/
@@ -36,19 +38,78 @@ lines)>
 "
 ```
 
-6. Install [Meteor][meteor]
+7. Install [Meteor][meteor]
 
 ```bash
 curl https://install.meteor.com/ | sh
 ```
 
-7. Run the server:
+8. Run the server:
 
 ```bash
 learners-guild/start.sh
 ```
 
-## Need to send a PR Upstream?
+
+## Troubleshooting
+
+- Issue: attempting to update dependencies results in this error:
+  ```
+  essjay:echo-chat essjay-lg$ meteor add learnersguild:rocketchat-lg-sso
+  learnersguild:rocketchat-lg-sso: updating npm dependencies -- @learnersguild/idm-jwt-auth...
+   => Errors while adding packages:
+
+  While building package learnersguild:rocketchat-lg-sso:
+  error: couldn't install npm package @learnersguild/idm-jwt-auth@0.2.4: Command failed: npm ERR! 404 Not Found
+  npm ERR! 404
+  npm ERR! 404 'learnersguild/idm-jwt-auth' is not in the npm registry.
+  npm ERR! 404 You should bug the author to publish it
+  npm ERR! 404
+  npm ERR! 404 Note that you can also install from a
+  npm ERR! 404 tarball, folder, or http url, or git url.
+  ```
+
+  You might have run into an issue with installing scoped packages from NPM and incompatibility with the version of NPM used by meteor. Try updating it:
+  ```
+  cd ~/.meteor/packages/meteor-tool/1.1.*/mt-*/dev_bundle/lib
+  ../bin/npm install npm
+  ```
+
+
+## Differences from Upstream
+
+In order to maintain our own sanity, rather than making lots and lots of changes to Rocket.Chat, we've chosen a strategy of using the Meteor package system to isolate our changes in a manageable way. Specifically, we've _removed_ the following packages from stock Rocket.Chat:
+
+- rocketchat:slashcommands-archive
+- rocketchat:slashcommands-asciiarts
+- rocketchat:slashcommands-create
+- rocketchat:slashcommands-kick
+- rocketchat:slashcommands-me
+- rocketchat:slashcommands-mute
+- rocketchat:slashcommands-topic
+- rocketchat:slashcommands-unarchive
+
+In addition, we've consolidated all of our custom code into our own custom packages. At the time of this writing, those are:
+
+- [learnersguild:rocketchat-lg-sso][rocketchat-lg-sso]
+- [learnersguild:rocketchat-lg-api-extensions][rocketchat-lg-api-extensions]
+- [learnersguild:rocketchat-lg-game][rocketchat-lg-game]
+
+To simplify release management and deployment and make things as easy as possible, we're simply including these packages in the `packages` directory on the `lg-master` branch of our Rocket.Chat fork (this repository).
+
+### IMPORTANT -- making changes
+
+If you need to make changes, they should in 99% of cases be made within our custom packages. If you make changes elsewhere, _you're most likely doing something wrong_. We always want to be able to pull-in upstream changes, so we don't want to deviate from upstream packages. You can always add another custom package if you need to, and you can also remove any of the standard Rocket.Chat packages (since those end up just being a few lines changed in the `.meteor/packages` and `.meteor/versions` files.
+
+Thus, any changes you make to Rocket.Chat core packages should be:
+
+- made from the `develop` branch after sync'ing it with upstream
+- made in a way that a PR will be accepted
+
+Detailed instructions follow ...
+
+
+## Need to send a PR upstream to Rocket.Chat?
 
 1. First, make sure we are tracking `upstream` via git:
 
@@ -99,74 +160,14 @@ git push heroku lg-master:master
 ```
 
 
-## Differences from Upstream
-
-In order to maintain our own sanity, rather than making lots and lots of changes to Rocket.Chat, we've chosen a strategy of isolating our changes into a few meteor packages. At the time of this writing, those are:
-
-## [learnersguild:rocketchat-lg-sso][rocketchat-lg-sso]
-
-This package is how we integrate our SSO functionality (via [idm][idm]) into Rocket.Chat / Meteor.
-
-## [learnersguild:rocketchat-lg-api-extensions][rocketchat-lg-api-extensions]
-
-This package contains custom API extensions for Rocket.Chat within Learners Guild.
-
-## [learnersguild:rocketchat-lg-slash-commands][rocketchat-lg-slash-commands]
-
-This package contains all of our custom `/slash` commands that interface with our Learners Guild services. For example, `/profile` and `/vote`.
-
-The easiest way to test changes locally (that I've found so far) is to:
-
-1. Create a symbolic link from your clone of the package's git repository into the `packages` directory
-
-2. Add the package(s) (it will look for them in the `/packages` folder first):
-
-```bash
-meteor add learnersguild:rocketchat-lg-sso
-meteor add learnersguild:rocketchat-lg-api-extensions
-meteor add learnersguild:rocketchat-lg-slash-commands
-```
-
-3. At this point, any changes you make in your cloned repository will cause the Meteor server to restart and the client to reload (which, on Meteor 1.2, takes forever). Once you're confident that things are working, you should bump the version number (using good [semver][semver] practices), and push. CI will make sure the packages get published.
-
-There's a script that should handle this for you automatically as long as you have the repositories checked out parallel to `echo-chat`:
-
-```bash
-learnersguild/update.sh
-```
-
-Make sure you've cloned each package's repo from github into the same directory as the `echo-chat` clone. **Note that this will currently pull the `master` branch for each of those repos**, so if you'd like to incorporate changes in any of those repos that haven't already been merged to master on github, you'll want to update any packages  manually.
-
-## Troubleshooting
-
-- Issue: attempting to update dependencies results in this error:
-  ```
-  essjay:echo-chat essjay-lg$ meteor add learnersguild:rocketchat-lg-sso
-  learnersguild:rocketchat-lg-sso: updating npm dependencies -- @learnersguild/idm-jwt-auth...
-   => Errors while adding packages:
-
-  While building package learnersguild:rocketchat-lg-sso:
-  error: couldn't install npm package @learnersguild/idm-jwt-auth@0.2.4: Command failed: npm ERR! 404 Not Found
-  npm ERR! 404
-  npm ERR! 404 'learnersguild/idm-jwt-auth' is not in the npm registry.
-  npm ERR! 404 You should bug the author to publish it
-  npm ERR! 404
-  npm ERR! 404 Note that you can also install from a
-  npm ERR! 404 tarball, folder, or http url, or git url.
-  ```
-
-  You might have run into an issue with installing scoped packages from NPM and incompatibility with the version of NPM used by meteor. Try updating it:
-  ```
-  cd ~/.meteor/packages/meteor-tool/1.1.*/mt-*/dev_bundle/lib
-  ../bin/npm install npm
-  ```
-
 [mehserve]: https://github.com/timecounts/mehserve
 [meteor]: https://www.meteor.com/
 [rocket-chat-pr]: https://github.com/RocketChat/Rocket.Chat/pulls
 [idm]: https://github.com/LearnersGuild/idm
+[game]: https://github.com/LearnersGuild/game
 [rocketchat-lg-sso]: https://github.com/LearnersGuild/rocketchat-lg-sso
 [rocketchat-lg-api-extensions]: https://github.com/LearnersGuild/rocketchat-lg-api-extensions
-[rocketchat-lg-slash-commands]: https://github.com/LearnersGuild/rocketchat-lg-slash-commands
+[rocketchat-lg-game]: https://github.com/LearnersGuild/rocketchat-lg-game
 [semver]: http://semver.org/
 [kadira]: https://ui.kadira.io/
+[git-subrepo]: https://github.com/ingydotnet/git-subrepo

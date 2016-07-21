@@ -12,6 +12,7 @@ Package.onUse(function (api) {
   api.use([
     'ecmascript',
     'deepwell:raven@0.3.0',
+    'learnersguild:rocketchat-lg-core@1.0.0',
   ])
   api.use([
     'nimble:restivus@0.8.10',
@@ -20,6 +21,5 @@ Package.onUse(function (api) {
 
   api.addFiles([
     'server/api.js',
-    'server/sentry.js',
   ], 'server')
 })

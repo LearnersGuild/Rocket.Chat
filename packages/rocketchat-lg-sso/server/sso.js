@@ -1,5 +1,6 @@
-/* global userFromJWT:true */
+/* global userFromJWT:true, logger */
 /* exported userFromJWT */
+
 userFromJWT = Npm.require('@learnersguild/idm-jwt-auth/lib/utils').userFromJWT
 
 function joinRoom(rcUser, roomName) {
@@ -11,7 +12,7 @@ function joinRoom(rcUser, roomName) {
 
 function setAvatarFromGitHubAvatar(rcUser, lgUser) {
   Meteor.runAsUser(rcUser._id, () => {
-    console.log('[LG SSO] setting avatar from GitHub avatar')
+    logger.log('setting avatar from GitHub avatar')
     const url = `https://github.com/${lgUser.handle}.png?s=200`
     Meteor.call('setAvatarFromService', url, null, 'url')
   })
@@ -40,13 +41,13 @@ function createOrUpdateUserFromJWT(lgJWT) {
   }
 
   if (rcUser) {
-    console.log('[LG SSO] found user, updating Rocket.Chat user info')
+    logger.log('found user, updating Rocket.Chat user info')
     // don't kill any previous resume tokens when updating user info
     const mergedUser = Object.assign({}, newUser, {services: rcUser.services})
     Meteor.users.update(rcUser, mergedUser)
     rcUser = Meteor.users.findOne(rcUser._id)
   } else {
-    console.log('[LG SSO] no such user, creating new Rocket.chat user')
+    logger.log('no such user, creating new Rocket.chat user')
     const userId = Accounts.insertUserDoc({}, newUser)
     rcUser = Meteor.users.findOne(userId)
   }
@@ -56,7 +57,7 @@ function createOrUpdateUserFromJWT(lgJWT) {
     setAvatarFromGitHubAvatar(rcUser, lgUser)
   } catch (err) {
     RavenLogger.log(err)
-    console.warn('[LG SSO] could not set avatar from GitHub avatar', err.stack)
+    logger.warn('could not set avatar from GitHub avatar', err.stack)
   }
 
   // create or update the lgJWT, user info, and player info
@@ -89,7 +90,7 @@ Accounts.registerLoginHandler(loginRequest => {
       joinRoom(rcUser, 'general')
     } catch (err) {
       RavenLogger.log(err)
-      console.warn('[LG SSO] could not join `general` room', err.stack)
+      logger.warn('could not join `general` room', err.stack)
     }
 
     // create or update the login token
@@ -103,7 +104,7 @@ Accounts.registerLoginHandler(loginRequest => {
     return {userId: rcUser._id, token: stampedToken.token}
   } catch (err) {
     RavenLogger.log(err)
-    console.error('[LG SSO] error signing-in using SSO on idm service', err.stack)
+    logger.error('error signing-in using SSO on idm service', err.stack)
   }
 
   return undefined

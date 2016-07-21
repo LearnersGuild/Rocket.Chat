@@ -1,0 +1,42 @@
+{
+  "scripts": {
+    "lint": "./node_modules/.bin/xo",
+    "test": "npm run lint"
+  },
+  "xo": {
+    "rules": {
+      "comma-dangle": [
+        0
+      ],
+      "no-negated-condition": [
+        0
+      ],
+      "quotes": [
+        2,
+        "single",
+        "avoid-escape"
+      ],
+      "xo/filename-case": 0
+    },
+    "globals": [
+      "Accounts",
+      "ChatMessage",
+      "HTTP",
+      "Meteor",
+      "Npm",
+      "Package",
+      "Random",
+      "RavenLogger",
+      "RocketChat",
+      "Session",
+      "Template",
+      "Tracker"
+    ],
+    "esnext": true,
+    "space": true,
+    "semicolon": false
+  },
+  "devDependencies": {
+    "xo": "^0.15.1"
+  }
+}

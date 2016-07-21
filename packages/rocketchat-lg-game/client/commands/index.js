@@ -1,5 +1,5 @@
 /* eslint-disable prefer-arrow-callback */
-/* global commandFuncs */
+/* global commandFuncs, logger */
 
 function invoke(command, commandParamStr /* , commandInfo */) {
   // This is gross. We can't use Meteor.call() inside of this invoke() function
@@ -13,10 +13,10 @@ function invoke(command, commandParamStr /* , commandInfo */) {
   // Meteor.call() all together because we can use the @learnersguild/game-cli
   // module client-side. One can dream ...
   setTimeout(function () {
-    console.log(`[LG SLASH COMMANDS] '/${command}' invoked with '${commandParamStr}'`)
+    logger.log(`'/${command}' invoked with '${commandParamStr}'`)
     Meteor.call('parseLGCommandStr', command, commandParamStr, (err, args) => {
       if (err) {
-        console.warn('[LG SLASH COMMANDS] unable to parse command string -- probably an invalid option; not running client-side command function')
+        logger.warn('unable to parse command string -- probably an invalid option; not running client-side command function')
         return
       }
       const commandFunc = commandFuncs[command]
@@ -55,7 +55,6 @@ Meteor.startup(function () {
 
       // render responses from /slash commands
       RocketChat.Notifications.onUser('lg-slash-command-response', msg => {
-        // console.log('[LG SLASH COMMANDS] command response:', msg)
         ChatMessage.upsert({_id: msg._id}, msg)
       })
     } else {

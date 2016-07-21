@@ -1,4 +1,4 @@
-/* global LG_BOT_USERNAME, notifyUser:true, lastSlashCommandRoomIds */
+/* global LG_BOT_USERNAME, notifyUser:true, lastSlashCommandRoomIds, logger */
 /* exported notifyUser */
 
 const socketCluster = Npm.require('socketcluster-client')
@@ -19,10 +19,10 @@ let socket
 function scConnect() {
   const scHostname = process.env.NODE_ENV === 'development' ? 'game.learnersguild.dev' : 'game.learnersguild.org'
   socket = socketCluster.connect({hostname: scHostname})
-  socket.on('connect', () => console.log('... socket connected'))
-  socket.on('disconnect', () => console.log('socket disconnected, will try to reconnect socket ...'))
+  socket.on('connect', () => logger.log('... socket connected'))
+  socket.on('disconnect', () => logger.log('socket disconnected, will try to reconnect socket ...'))
   socket.on('connectAbort', () => null)
-  socket.on('error', error => console.warn(error.message))
+  socket.on('error', error => logger.warn(error.message))
 }
 
 Meteor.methods({
@@ -35,7 +35,7 @@ Meteor.methods({
       if (!user.services || !user.services.lgSSO) {
         const message = `Player notification subscribe not working for ${user.username} (id=${user._id}) because the user record is missing the 'services.lgSSO' attribute`
         RavenLogger.log(message)
-        console.error(`[LG SLASH COMMANDS] ${message}`)
+        logger.error(message)
         return
       }
       const {lgUser} = user.services.lgSSO
@@ -48,7 +48,7 @@ Meteor.methods({
           } else {
             const message = `Received player notification for ${user.username} (id=${user._id}), but do not know to which room to send it`
             RavenLogger.log(message)
-            console.error(`[LG SLASH COMMANDS] ${message}`)
+            logger.error(message)
           }
         }))
       }
@@ -64,7 +64,7 @@ Meteor.methods({
       if (!user.services || !user.services.lgSSO) {
         const message = `Player notification unsubscribe not working for ${user.username} (id=${user._id}) because the user record is missing the 'services.lgSSO' attribute`
         RavenLogger.log(message)
-        console.error(`[LG SLASH COMMANDS] ${message}`)
+        logger.error(message)
         return
       }
       const {lgUser} = user.services.lgSSO

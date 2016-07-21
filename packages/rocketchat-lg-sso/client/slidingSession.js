@@ -1,4 +1,4 @@
-/* global logger */
+/* global getServiceBaseURL, IDM, logger */
 
 let lastUserActivityAt = 0
 function updateLastUserActivityAt() {
@@ -33,8 +33,6 @@ function fetchJWTAndUpdateUserInfo() {
   }
 
   logger.log('fetching new JWT token and updating user info')
-  /* global window */
-  const baseURL = window.location.href.match(/learnersguild\.dev/) ? 'http://idm.learnersguild.dev' : 'https://idm.learnersguild.org'
   const {lgUser, lgJWT} = user.services.lgSSO
   const query = {
     query: `
@@ -49,7 +47,7 @@ query($id: ID!) {
 
   lastFetchAndUpdateAt = now
   /* global rawGraphQLFetcher */
-  return rawGraphQLFetcher(lgJWT, baseURL)(query)
+  return rawGraphQLFetcher(lgJWT, getServiceBaseURL(IDM))(query)
     .then(response => {
       const lgJWT = response.headers['learnersguild-jwt']
       if (lgJWT) {

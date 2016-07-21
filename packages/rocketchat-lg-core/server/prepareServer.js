@@ -1,5 +1,6 @@
-/* global LG_BOT_USERNAME:true */
+/* global LG_BOT_USERNAME:true, logger */
 /* exported LG_BOT_USERNAME */
+
 LG_BOT_USERNAME = 'echo'
 
 function ensureLGBotUserExists() {
@@ -21,9 +22,9 @@ function ensureLGBotUserExists() {
     }
     const userId = Accounts.insertUserDoc({}, botUserDoc)
     user = Meteor.users.findOne(userId)
-    console.log('[LG SSO] created echo (bot) user')
+    logger.log('created echo (bot) user')
   } else {
-    console.log('[LG SSO] found existing echo (bot) user')
+    logger.log('found existing echo (bot) user')
   }
 
   Accounts.setPassword(user._id, process.env.CHAT_API_USER_SECRET, {logout: false})
@@ -33,13 +34,13 @@ function ensureLGBotUserExists() {
 function ensureWelcomChannelExists(botUser) {
   let welcomeRoom = RocketChat.models.Rooms.findOneByName('welcome')
   if (welcomeRoom) {
-    console.log('[LG SSO] found existing welcome room')
+    logger.log('found existing welcome room')
     return
   }
   Meteor.runAsUser(botUser._id, () => {
     const channel = Meteor.call('createChannel', 'welcome', [])
     welcomeRoom = RocketChat.models.Rooms.findOne({_id: channel.rid})
-    console.log('[LG SSO] created welcome room')
+    logger.log('created welcome room')
   })
 }
 

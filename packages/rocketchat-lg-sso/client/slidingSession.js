@@ -1,3 +1,5 @@
+/* global logger */
+
 let lastUserActivityAt = 0
 function updateLastUserActivityAt() {
   lastUserActivityAt = Date.now()
@@ -14,7 +16,7 @@ function fetchJWTAndUpdateUserInfo() {
   if (!user.services || !user.services.lgSSO) {
     const message = `Sliding sessions not working for ${user.username} (id=${user._id}) because the user record is missing the 'services.lgSSO' attribute`
     RavenLogger.log(message)
-    console.error(`[LG SSO] ${message}`)
+    logger.error(message)
     return
   }
 
@@ -30,7 +32,7 @@ function fetchJWTAndUpdateUserInfo() {
     return
   }
 
-  console.log('[LG SSO] fetching new JWT token and updating user info')
+  logger.log('fetching new JWT token and updating user info')
   /* global window */
   const baseURL = window.location.href.match(/learnersguild\.dev/) ? 'http://idm.learnersguild.dev' : 'https://idm.learnersguild.org'
   const {lgUser, lgJWT} = user.services.lgSSO
@@ -56,7 +58,7 @@ query($id: ID!) {
     })
     .catch(err => {
       RavenLogger.log(err)
-      console.error('[LG SSO] error updating user', err.stack)
+      logger.error('error updating user', err.stack)
     })
 }
 

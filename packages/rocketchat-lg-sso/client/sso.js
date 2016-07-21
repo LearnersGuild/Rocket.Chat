@@ -1,10 +1,11 @@
+/* global window, document, logger */
+
 function loginUsingLearnersGuildJWT(lgJWT, userCallback) {
   const methodArguments = [{lgSSO: true, lgJWT}]
 
   return Accounts.callLoginMethod({methodArguments, userCallback})
 }
 
-/* global window, document */
 function parseUrl(url = window.location.href) {
   const urlParser = document.createElement('a')
   urlParser.href = url
@@ -47,7 +48,7 @@ Template.loginLayout.created = function () {
   const urlObject = parseUrl(window.location.href)
   const {lgJWT} = urlObject.query
   if (lgJWT) {
-    console.log('[LG SSO] lgJWT token found in query string, signing-in')
+    logger.log('lgJWT token found in query string, signing-in')
     /* global history */
     if (history && typeof history.pushState === 'function') {
       const newQuery = Object.assign({}, urlObject.query)
@@ -63,7 +64,7 @@ Template.loginLayout.created = function () {
   const {inviteCode} = HttpQueryString.parse(window.location.search.slice(1))
   const authURLQuery = HttpQueryString.stringify({redirect, responseType: 'token'})
   const authURL = inviteCode ? `${idmURL()}/sign-up/${inviteCode}?${authURLQuery}` : `${idmURL()}/sign-in?${authURLQuery}`
-  console.log(`[LG SSO] no lgJWT token found in query string, redirecting to ${authURL}`)
+  logger.log(`no lgJWT token found in query string, redirecting to ${authURL}`)
   window.location.href = authURL
 }
 

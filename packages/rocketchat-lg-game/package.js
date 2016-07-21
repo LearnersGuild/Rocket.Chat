@@ -30,14 +30,14 @@ Package.onUse(function (api) {
     'client/commands/profile.js',
     'client/commands/retro.js',
     'client/commands/vote.js',
-    'client/lib/flexPanel.js',
+    'client/util/flexPanel.js',
     'client/views/flexPanelIframe.html',
     'client/views/flexPanelIframe.js',
   ], 'client')
   api.addFiles([
     'server/commands/index.js',
-    'server/lib/format.js',
-    'server/lib/notifyUser.js',
+    'server/util/format.js',
+    'server/util/notifyUser.js',
   ], 'server')
 })
 

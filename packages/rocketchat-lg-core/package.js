@@ -10,7 +10,7 @@ Package.onUse(function (api) {
 
   api.use([
     'ecmascript',
-    'deepwell:raven@0.3.0'
+    'deepwell:raven@0.3.0',
   ])
   api.use([
     'rocketchat:lib@0.0.1'

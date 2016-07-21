@@ -39,16 +39,19 @@ function createOrUpdateUserFromJWT(lgJWT) {
     type: 'user',
     active: true,
   }
+  const lgSSO = {lgUser, lgJWT}
 
   if (rcUser) {
     logger.log('found user, updating Rocket.Chat user info')
     // don't kill any previous resume tokens when updating user info
-    const mergedUser = Object.assign({}, newUser, {services: rcUser.services})
+    const services = Object.assign({}, rcUser.services, {lgSSO})
+    const mergedUser = Object.assign({}, newUser, {services})
     Meteor.users.update(rcUser, mergedUser)
     rcUser = Meteor.users.findOne(rcUser._id)
   } else {
     logger.log('no such user, creating new Rocket.chat user')
-    const userId = Accounts.insertUserDoc({}, newUser)
+    const mergedUser = Object.assign({}, newUser, {services: {lgSSO}})
+    const userId = Accounts.insertUserDoc({}, mergedUser)
     rcUser = Meteor.users.findOne(userId)
   }
 
@@ -59,17 +62,6 @@ function createOrUpdateUserFromJWT(lgJWT) {
     RavenLogger.log(err)
     logger.warn('could not set avatar from GitHub avatar', err.stack)
   }
-
-  // create or update the lgJWT, user info, and player info
-  const lgSSO = {
-    lgUser,
-    lgJWT,
-  }
-  const services = Object.assign({}, rcUser.services, {lgSSO})
-  Meteor.users.update(rcUser, {
-    $set: {services}
-  })
-  rcUser = Meteor.users.findOne(rcUser._id)
 
   return rcUser
 }

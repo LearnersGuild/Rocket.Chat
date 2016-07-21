@@ -39,6 +39,7 @@ Package.onUse(function (api) {
     'server/commands/index.js',
     'server/util/format.js',
     'server/util/notifyUser.js',
+    'server/afterCreateuser.js',
   ], 'server')
 })
 

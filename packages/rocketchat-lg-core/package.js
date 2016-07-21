@@ -17,12 +17,12 @@ Package.onUse(function (api) {
   ], {weak: true, unordered: false})
 
   api.addFiles([
-    'client/util/getServiceBaseURL.js',
     'client/mapEmoji.js',
     'client/sentry.js',
   ], 'client')
   api.addFiles([
     'common/util/getPackageLogger.js',
+    'common/util/getServiceBaseURL.js',
     'common/util/graphQLFetcher.js',
   ])
   api.addFiles([
@@ -33,12 +33,10 @@ Package.onUse(function (api) {
   api.export([
     'GAME',
     'IDM',
-    'getServiceBaseURL',
-  ], 'client')
-  api.export([
     'apiHeaders',
-    'graphQLFetcher',
     'getPackageLogger',
+    'getServiceBaseURL',
+    'graphQLFetcher',
     'rawGraphQLFetcher',
   ])
   api.export([

@@ -1,5 +1,9 @@
 # Learners Guild Rocket.Chat
 
+[![Code Climate GPA](https://codeclimate.com/repos/579a5a518945080085002118/badges/169989a20bb55ad089d5/gpa.svg)](https://codeclimate.com/repos/579a5a518945080085002118/feed)
+[![Code Climate Issue Count](https://codeclimate.com/repos/579a5a518945080085002118/badges/169989a20bb55ad089d5/issue_count.svg)](https://codeclimate.com/repos/579a5a518945080085002118/feed)
+[![Test Coverage](https://codeclimate.com/repos/579a5a518945080085002118/badges/169989a20bb55ad089d5/coverage.svg)](https://codeclimate.com/repos/579a5a518945080085002118/coverage)
+
 This is Learners Guild's custom fork of Rocket.Chat. The primary difference is the presence of a few custom plugins, a small startup script, and this readme.
 
 ## Production Monitoring

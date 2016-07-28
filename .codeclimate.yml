@@ -30,4 +30,4 @@ ratings:
   - "**.py"
   - "**.rb"
 exclude_paths:
-- !packages/rocketchat-lg-*
+- "!packages/rocketchat-lg-*/**"

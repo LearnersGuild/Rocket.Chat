@@ -29,7 +29,5 @@ ratings:
   - "**.php"
   - "**.py"
   - "**.rb"
-# exclude_paths:
-# - config/
-# - db/
-# - test/
+exclude_paths:
+- !packages/rocketchat-lg-*

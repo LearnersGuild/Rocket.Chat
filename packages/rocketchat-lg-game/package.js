@@ -1,6 +1,6 @@
 Package.describe({
   name: 'learnersguild:rocketchat-lg-game',
-  version: '1.0.1',
+  version: '1.1.2',
   summary: 'Custom functionality for the Learners Guild game (including slash commands for Rocket.Chat).',
 })
 
@@ -44,6 +44,6 @@ Package.onUse(function (api) {
 })
 
 Npm.depends({
-  '@learnersguild/game-cli': '1.0.0',
+  '@learnersguild/game-cli': '1.1.2',
   'socketcluster-client': '4.3.17'
 })

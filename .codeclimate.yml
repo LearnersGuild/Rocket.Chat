@@ -17,6 +17,8 @@ engines:
         enabled: false
       comma-dangle:
         enabled: false
+      semi:
+        enabled: false
   fixme:
     enabled: true
 ratings:

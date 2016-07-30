@@ -51,7 +51,7 @@ curl https://install.meteor.com/ | sh
 8. Run the server:
 
 ```bash
-learners-guild/start.sh
+npm start
 ```
 
 

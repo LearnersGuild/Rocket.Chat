@@ -1,6 +1,6 @@
 # NOTE: THIS IS A FORK
 
-This is a fork of Rocket.Chat by Learners Guild. See the [**Learners Guild README**](learners-guild/README.md) for more details and installation instructions.
+This is a fork of Rocket.Chat by Learners Guild. See the [**Learners Guild README**](README-learners-guild.md) for more details and installation instructions.
 
 ----------------
 
@@ -20,10 +20,10 @@ This is a fork of Rocket.Chat by Learners Guild. See the [**Learners Guild READM
 * [Mobile apps](#mobile-apps)
 * [Desktop apps](#desktop-apps)
 * [Deployment](#deployment)
-   * [Sandstorm.io](#sandstormio) 
-   * [DPlatform](#dplatform) 
+   * [Sandstorm.io](#sandstormio)
+   * [DPlatform](#dplatform)
    * [IndieHosters](#indiehosters)
-   * [Cloudron.io](#cloudronio) 
+   * [Cloudron.io](#cloudronio)
    * [Nitrous.io](#nitrousio)
    * [Heroku](#heroku)
   * [Scalingo](#scalingo)
@@ -87,7 +87,7 @@ Host your own Rocket.Chat server in four seconds flat:
 
 ## DPlatform
 
-Easiest way to install a ready-to-run Rocket.Chat server on a Linux machine, VM, or VPS - [@j8r's   DPlatform](https://github.com/j8r/DPlatform), now in Alpha! 
+Easiest way to install a ready-to-run Rocket.Chat server on a Linux machine, VM, or VPS - [@j8r's   DPlatform](https://github.com/j8r/DPlatform), now in Alpha!
 
 [![DP deploy](https://raw.githubusercontent.com/DFabric/DPlatform-ShellCore/gh-pages/img/deploy.png)](https://dfabric.github.io/DPlatform-ShellCore)
 

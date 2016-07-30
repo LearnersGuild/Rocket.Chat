@@ -1,0 +1,81 @@
+{
+  "name": "echo-chat",
+  "version": "1.1.0",
+  "description": "echo LOS chat and dashboard",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LearnersGuild/echo-chat.git"
+  },
+  "author": {
+    "name": "Jeffrey Wescott",
+    "email": "jeffrey@learnersguild.org"
+  },
+  "scripts": {
+    "start": "source .env && for var in `cat .env | grep = | cut -f1 -d=`; do export \"$var\"; done && meteor",
+    "lint": "./node_modules/.bin/xo './packages/rocketchat-lg-*/**/*.js'",
+    "test:cov": "npm run test:cov:run && npm run test:cov:send",
+    "test:cov:run": "NODE_ENV=test ./node_modules/.bin/istanbul cover --dir tests/coverage ./node_modules/.bin/babel-tape-runner './**/__tests__/*.test.js'",
+    "test:cov:send": "./node_modules/.bin/codeclimate-test-reporter < ./tests/coverage/lcov.info",
+    "test:run": "NODE_ENV=test ./node_modules/.bin/babel-tape-runner './**/__tests__/*.test.js'",
+    "test": "npm run lint && npm run test:run --"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-2"
+    ]
+  },
+  "xo": {
+    "rules": {
+      "comma-dangle": [
+        0
+      ],
+      "no-negated-condition": [
+        0
+      ],
+      "quotes": [
+        2,
+        "single",
+        "avoid-escape"
+      ],
+      "xo/filename-case": 0
+    },
+    "globals": [
+      "Accounts",
+      "ChatMessage",
+      "HTTP",
+      "Meteor",
+      "Npm",
+      "Package",
+      "Random",
+      "RavenLogger",
+      "Restivus",
+      "RocketChat",
+      "Session",
+      "Template",
+      "Tracker"
+    ],
+    "esnext": true,
+    "space": true,
+    "semicolon": false
+  },
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.11.4",
+    "babel-polyfill": "^6.9.1",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-2": "^6.11.0",
+    "babel-tape-runner": "^2.0.1",
+    "codeclimate-test-reporter": "^0.3.3",
+    "faucet": "0.0.1",
+    "glob": "^7.0.5",
+    "istanbul": "^1.1.0-alpha.1",
+    "pre-commit": "^1.1.3",
+    "tape": "^4.6.0",
+    "xo": "^0.15.1"
+  },
+  "precommit": [
+    "lint"
+  ]
+}

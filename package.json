@@ -24,12 +24,6 @@
     "test:run": "NODE_ENV=test ./node_modules/.bin/babel-tape-runner './**/__tests__/*.test.js'",
     "test": "npm run lint && npm run test:run --"
   },
-  "babel": {
-    "presets": [
-      "es2015",
-      "stage-2"
-    ]
-  },
   "xo": {
     "rules": {
       "comma-dangle": [

@@ -12,15 +12,16 @@
     "email": "jeffrey@learnersguild.org"
   },
   "scripts": {
-    "start": "test \"$NODE_ENV\" = 'development' && npm run dev:env ; npm run start:server",
-    "dev:env": "source .env && for var in `cat .env | grep = | cut -f1 -d=`; do export \"$var\"; done",
-    "start:server": "rm -rf ./node_modules && meteor",
-    "npm:install": "test -d node_modules || npm install",
-    "lint": "npm run npm:install && ./node_modules/.bin/xo './packages/rocketchat-lg-*/**/*.js'",
+    "start": "test \"$NODE_ENV\" = 'development' && npm run start:dev || npm run start:prod",
+    "start:prod": "test \"$NODE_ENV\" = 'development' || npm run start:server",
+    "start:dev": "source .env && for var in `cat .env | grep = | cut -f1 -d=`; do export \"$var\"; done && npm run start:server",
+    "start:server": "meteor || echo 'Done.'",
+    "lint": "./node_modules/.bin/xo './packages/rocketchat-lg-*/**/*.js'",
+    "test:ci": "npm run test:cov && rm -rf ./node_modules",
     "test:cov": "npm run test:cov:run && npm run test:cov:send",
-    "test:cov:run": "NODE_ENV=test npm run npm:install && ./node_modules/.bin/istanbul cover --dir tests/coverage ./node_modules/.bin/babel-tape-runner './**/__tests__/*.test.js'",
-    "test:cov:send": "npm run npm:install && ./node_modules/.bin/codeclimate-test-reporter < ./tests/coverage/lcov.info",
-    "test:run": "NODE_ENV=test npm run npm:install && ./node_modules/.bin/babel-tape-runner './**/__tests__/*.test.js'",
+    "test:cov:run": "NODE_ENV=test ./node_modules/.bin/istanbul cover --dir tests/coverage ./node_modules/.bin/babel-tape-runner './**/__tests__/*.test.js'",
+    "test:cov:send": "./node_modules/.bin/codeclimate-test-reporter < ./tests/coverage/lcov.info",
+    "test:run": "NODE_ENV=test ./node_modules/.bin/babel-tape-runner './**/__tests__/*.test.js'",
     "test": "npm run lint && npm run test:run --"
   },
   "babel": {

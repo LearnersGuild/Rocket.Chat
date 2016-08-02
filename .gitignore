@@ -1,6 +1,7 @@
 **/bin/**
 **/build/*
 **/coverage/*
+**/.nyc_output/*
 **/node_modules/*
 **/tmp/*
 /private/certs/*

@@ -38,9 +38,6 @@
     "xo": "^0.15.1"
   },
   "babel": {
-    "only": [
-      "packages/rocketchat-lg-*/**/*.js"
-    ],
     "env": {
       "development": {
         "presets": [
@@ -49,6 +46,9 @@
         ]
       },
       "test": {
+        "only": [
+          "packages/rocketchat-lg-*/**/*.js"
+        ],
         "presets": [
           "es2015",
           "stage-2"

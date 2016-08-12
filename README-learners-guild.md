@@ -54,6 +54,9 @@ curl https://install.meteor.com/ | sh
 npm start
 ```
 
+9. Configure Direct Message Webhook
+
+See https://github.com/LearnersGuild/echo-chat/issues/50
 
 ## Troubleshooting
 

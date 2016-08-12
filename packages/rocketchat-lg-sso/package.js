@@ -40,5 +40,5 @@ Package.onUse(function (api) {
 })
 
 Npm.depends({
-  '@learnersguild/idm-jwt-auth': '0.2.5'
+  '@learnersguild/idm-jwt-auth': '0.3.0'
 })

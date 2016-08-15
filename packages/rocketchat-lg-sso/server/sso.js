@@ -46,6 +46,15 @@ function createOrUpdateUserFromJWT(lgJWT) {
     // don't kill any previous resume tokens when updating user info
     const services = Object.assign({}, rcUser.services, {lgSSO})
     const mergedUser = Object.assign({}, newUser, {services})
+
+    // Explicitly set username. It's a noop if the username is the same,
+    // bit it triggers all of the history re-writing necessary
+    // if the username really is changing.
+    Meteor.runAsUser(rcUser._id, () =>
+      Meteor.call('setUsername', lgUser.handle)
+    )
+
+    // Now update the rest of the user attributes
     Meteor.users.update(rcUser, mergedUser)
     rcUser = Meteor.users.findOne(rcUser._id)
   } else {

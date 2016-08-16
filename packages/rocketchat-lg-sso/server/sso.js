@@ -22,9 +22,7 @@ function createOrUpdateUserFromJWT(lgJWT) {
   const lgUser = userFromJWT(lgJWT)
 
   let rcUser = Meteor.users.findOne({
-    'emails.address': {
-      $in: lgUser.emails
-    }
+    'services.lgSSO.lgUser.id': lgUser.id
   })
   const roles = ['user']
   if (lgUser.roles.indexOf('backoffice') >= 0) {

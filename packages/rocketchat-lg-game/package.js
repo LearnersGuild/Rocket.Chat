@@ -44,6 +44,6 @@ Package.onUse(function (api) {
 })
 
 Npm.depends({
-  '@learnersguild/game-cli': '1.1.2',
+  '@learnersguild/game-cli': '1.1.4',
   'socketcluster-client': '4.3.17'
 })

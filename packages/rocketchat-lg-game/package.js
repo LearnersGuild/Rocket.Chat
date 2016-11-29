@@ -31,6 +31,7 @@ Package.onUse(function (api) {
     'client/commands/profile.js',
     'client/commands/retro.js',
     'client/commands/vote.js',
+    'client/commands/playbook.js',
     'client/util/flexPanel.js',
     'client/views/flexPanelIframe.html',
     'client/views/flexPanelIframe.js',
@@ -44,6 +45,6 @@ Package.onUse(function (api) {
 })
 
 Npm.depends({
-  '@learnersguild/game-cli': '1.1.5',
+  '@learnersguild/game-cli': '1.2.0',
   'socketcluster-client': '4.3.17'
 })

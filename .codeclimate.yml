@@ -11,7 +11,7 @@ engines:
       - python
       - php
   eslint:
-    enabled: true
+    enabled: false
     checks:
       global-require:
         enabled: false
